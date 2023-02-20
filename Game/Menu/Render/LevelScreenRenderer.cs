@@ -25,9 +25,9 @@ public class LevelScreenRenderer : UiRenderer
 
         Raylib.DrawRectangleLines(20, 20, Raylib.GetScreenWidth() - 40, Raylib.GetScreenHeight() - 40, Color.WHITE);
         
-        Raylib.DrawRectangle(0, 0, Raylib.GetScreenWidth(), 20, Color.RED);
-        Raylib.DrawRectangle(Raylib.GetScreenWidth() - 20, 0, 20, Raylib.GetScreenHeight() - 20, Color.RED);
-        Raylib.DrawRectangle(0, 20, 20, Raylib.GetScreenHeight() - 20, Color.RED);
-        Raylib.DrawRectangle(20, Raylib.GetScreenHeight() - 20, Raylib.GetScreenWidth(), 20, Color.RED);
+        Raylib.DrawRectangle(0, 0, Raylib.GetScreenWidth(), 20, Color.BLACK);
+        Raylib.DrawRectangle(Raylib.GetScreenWidth() - 20, 0, 20, Raylib.GetScreenHeight() - 20, Color.BLACK);
+        Raylib.DrawRectangle(0, 20, 20, Raylib.GetScreenHeight() - 20, Color.BLACK);
+        Raylib.DrawRectangle(20, Raylib.GetScreenHeight() - 20, Raylib.GetScreenWidth(), 20, Color.BLACK);
     }
 }

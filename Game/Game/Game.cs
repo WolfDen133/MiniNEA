@@ -97,21 +97,6 @@ public class Game
         
         if (!IsRunning) return;
         
-        if (GameConst.Debug)
-        {
-            Raylib.DrawText(
-                "GAME: " + "\n" +
-                " FPS: " + Raylib.GetFPS() + "\n" +
-                " Delta: " + Raylib.GetFrameTime() + "\n" +
-                "\n\n" +
-                "PLAYER: \n Position: " + _player.Position.X + ", " + _player.Position.Y + "\n" + 
-                " Velocity: " + _player.Controller._velocity.X + " " + _player.Controller._velocity.Y + "\n" +
-                " OnPlatform: " + (_player.Controller.OnGround ? "true" : "false") + "\n"
-                , 0, 0, 24, Color.WHITE);
-        }
-        
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_F3)) GameConst.Debug = !GameConst.Debug;
-        
         _player.Tick();
         
         int targetHeight = (int) Loader.WindowManager.Camera.target.Y;

@@ -42,3 +42,5 @@ C:\Users\Reuben\RiderProjects\MiniNEA\Game\obj\Debug\net7.0\Game.genruntimeconfi
 C:\Users\Reuben\RiderProjects\MiniNEA\Game\obj\Debug\net7.0\ref\Game.dll
 C:\Users\Reuben\RiderProjects\MiniNEA\Game\bin\Debug\net7.0\Newtonsoft.Json.dll
 C:\Users\Reuben\RiderProjects\MiniNEA\Game\bin\Debug\net7.0\Newtonsoft.Json.Schema.dll
+C:\Users\minec\RiderProjects\MiniNEA\Game\bin\Debug\net7.0\Newtonsoft.Json.dll
+C:\Users\minec\RiderProjects\MiniNEA\Game\bin\Debug\net7.0\Newtonsoft.Json.Schema.dll

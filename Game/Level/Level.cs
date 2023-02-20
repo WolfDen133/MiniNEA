@@ -11,10 +11,10 @@ public class FloorData
 
 public class Level
 {
-    public string Name { get; set; }
+    public string Name { get; }
     private readonly string _data;
 
-    private List<FloorData> _floors = new List<FloorData>();
+    private List<FloorData> _floors = new();
     private Vector2 _spawn;
 
     public Level(string name, string data)
@@ -24,7 +24,6 @@ public class Level
         
         LoadData();
     }
-    
     private void LoadData()
     {
         dynamic ?levelData = JsonConvert.DeserializeObject(_data);

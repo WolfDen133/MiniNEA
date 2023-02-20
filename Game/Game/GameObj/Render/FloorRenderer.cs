@@ -13,6 +13,12 @@ public class FloorRenderer : ElementRenderer
 
     public override void Draw()
     {
-        Raylib.DrawRectangle((int) _floor._position.X, (int) _floor._position.Y, (int) _floor._dimensions.X, (int) _floor._dimensions.Y, Color.GRAY);
+        Raylib.DrawRectangle(
+            (int) _floor._position.X,
+            (int) _floor._position.Y,
+            (int) _floor._dimensions.X,
+            (int) _floor._dimensions.Y,
+            Color.GRAY
+        );
     }
 }

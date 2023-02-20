@@ -64,7 +64,7 @@ public class PlayerController
         
         int rx = (int) Math.Round(MoveStep * (_velocity.X / MaxAcceleration));
         int ry = (int) Math.Round(MoveStep * (_velocity.Y / MaxAcceleration));
-
+        
         float dimensionOffsetY = _parent.Dimensions.Y / 2;
         float dimensionOffsetX = _parent.Dimensions.X / 2;
         float footY = _parent.Position.Y + dimensionOffsetY;
