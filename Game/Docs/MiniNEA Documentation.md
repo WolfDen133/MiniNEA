@@ -4,7 +4,7 @@
 > 
 > - To create a 2D platform game
 > - Answer questions to complete quests, to gain items, in order to complete the game
-> - To incoperate information about computers into the game making it valuable to play, as it contains knolage
+> - To incorporate information about computers into the game making it valuable to play, as it contains knolage
 
 > ## Initial thoughs
 > I want to create a 2D platform game, with the player being a 'Nano-helper', working in a PC building work shop, gathering, moving, or repairing various parts, and gaining knowledge to complete the challenges.
@@ -32,3 +32,44 @@
 > The following code in Renderer.cs is the basic code to handle element registration, and drawing to screen.
 > ![](https://i.imgur.com/Ce5ygGI.png)
 > ![](https://i.imgur.com/K1QZQtd.png)
+
+> ### Game main file
+> I created a main file for the main game logic to be contained.
+> I also created a game render manager to send different elements to the main renderer.
+> All of this is contained under Game/.
+> ![](assets/game-renderer.png)
+
+> ### Creating registering a player
+> Firstly, I created a player class, and added its own custom renderer.
+> Then registered it in the main, the main then calls to the renderer for the player to be rendered.
+> There is a small section of code to render a white rectangle, with the center being the players coordinates.
+> ![](assets/player-renderer.png)
+> ![](assets/game1.png)
+
+> ### Player controller and physics 
+> Next I will be adding a player controller with included physics.
+> Firstly, I created `PlayerController.cs` and initialised it inside `Player.cs`.
+> Once I had done that, I then created a `Tick()` function inside the controller that will calculate the players positioning for each frame.
+> Im going to be calculating player positions based off of velocities inside the controller file.
+> ```csharp
+>    public void Tick()
+>    {
+>        HandleInput();
+>        
+>        _velocity.Y += Gravity;
+>        
+>        int rx = (int) Math.Round(MoveStep * (_velocity.X / MaxAcceleration));
+>        int ry = (int) Math.Round(MoveStep * (_velocity.Y / MaxAcceleration));
+> 
+>        Move(rx, ry);
+>    }
+> 
+>     public void Move(int x, int y)
+>     {
+>        Vector2 position = _parent.Position;
+>        position.X += Convert.ToSingle(x);
+>        position.Y += Convert.ToSingle(y);
+>        _parent.Position = position;
+>     }
+>```
+

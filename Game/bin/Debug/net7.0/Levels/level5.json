@@ -1,0 +1,29 @@
+﻿{
+  "spawn": [ 50, 190 ],
+  "floors": [
+    {
+      "position": [0, 100],
+      "dimensions": [300, 20]
+    },
+    {
+      "position": [500, 200],
+      "dimensions": [500, 20]
+    },
+    {
+      "position": [1500, 300],
+      "dimensions": [200, 20]
+    },
+    {
+      "position": [1600, 500],
+      "dimensions": [200, 20]
+    },
+    {
+      "position": [2300, 600],
+      "dimensions": [200, 20]
+    },
+    {
+      "position": [800, 200],
+      "dimensions": [200, 20]
+    }
+  ]
+}

@@ -1,8 +1,8 @@
 ﻿namespace Game.Window.Render.Renderers;
 
-public class ElementRenderer : SimpleRenderer
+public class UiRenderer : SimpleRenderer
 {
-    public ElementRenderer(string identifier, bool isEnabled = true)
+    public UiRenderer(string identifier, bool isEnabled = true)
     {
         Identifier = identifier;
         this.isEnabled = isEnabled;
