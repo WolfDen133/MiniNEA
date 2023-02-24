@@ -22,6 +22,10 @@ public class LevelSelectScreen : Window
         int lowestY = 0;
         int highestY = Raylib.GetScreenHeight();
         
+        // Iterate over all buttons
+        // Check to see if its the highest or lowest and assign lowest or highest y if so
+        // Check to see if mouse is over, if so adjust color for hover 
+        // Handle button click
         foreach (var pair in Buttons)
         {
             if (lowestY < pair.Value.Position.Y + pair.Value.Dimensions.Y) lowestY = (int) pair.Value.Position.Y + (int) pair.Value.Dimensions.Y;
@@ -47,6 +51,7 @@ public class LevelSelectScreen : Window
         }
 
         
+        // Handle scrolling using bounds registered above
         if (Raylib.GetMouseWheelMove() != 0)
         {
             int offset = (int) Raylib.GetMouseWheelMove() * 20;
@@ -54,6 +59,7 @@ public class LevelSelectScreen : Window
             if (lowestY + offset < Raylib.GetScreenHeight() - 50) offset = 0;
             if (highestY + offset > 130) offset = 0;
 
+            // Move all button coords
             foreach (var pair in Buttons)
             {
                 Vector2 position = pair.Value.Position;
@@ -66,6 +72,7 @@ public class LevelSelectScreen : Window
     
     private void RegisterButtons()
     {
+        // Register all buttons for levels
         foreach (var pair in Loader.Game.LevelManager.Levels)
         {
             string name = pair.Key;
@@ -76,6 +83,7 @@ public class LevelSelectScreen : Window
         }
     }
 
+    // Select a level id (NEEDS TO BE MOVED TO LEVEL MANAGER)
     private void SelectLevel(int id)
     {
         Buttons.TryGetValue(id, out Button? button);
@@ -91,6 +99,7 @@ public class LevelSelectScreen : Window
         Loader.Game.IsRunning = true;
     }
 
+    // Register a new button 
     private void AddButton (int id, string text)
     {
         Text buttonText = new Text();

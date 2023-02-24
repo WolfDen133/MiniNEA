@@ -1,5 +1,6 @@
 ﻿namespace Game.Window.Render.Renderers;
 
+// Parent of all the renderers
 public class SimpleRenderer
 {
     public bool isEnabled;

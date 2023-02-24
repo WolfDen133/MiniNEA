@@ -16,6 +16,7 @@ public class LevelScreenRenderer : UiRenderer
     {
         Raylib.DrawRectangle(20, 20, Raylib.GetScreenWidth() - 40, Raylib.GetScreenHeight() - 40, new Color(10, 10, 30, 150));
 
+        // Draw all button elements
         foreach (var pair in _parent.Buttons)
         {
             pair.Value.Renderer.Draw();

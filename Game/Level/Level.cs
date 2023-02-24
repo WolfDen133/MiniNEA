@@ -24,6 +24,8 @@ public class Level
         
         LoadData();
     }
+    
+    // Load json _data into data structure 
     private void LoadData()
     {
         dynamic ?levelData = JsonConvert.DeserializeObject(_data);

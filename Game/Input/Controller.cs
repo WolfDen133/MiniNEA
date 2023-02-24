@@ -1,57 +1,47 @@
-﻿using System.ComponentModel.Design.Serialization;
-using System.Numerics;
+﻿using System.Numerics;
 using Game.Game.GameObj;
 using Raylib_cs;
 
-namespace Game.Player;
+namespace Game.Input;
 
-public class PlayerController
+public class Controller
 {
+    private Controllable _parent;
     public Vector2 _velocity;
-    private readonly Player _parent;
     
-    private const int AccelerationSpeed = 2; // How many pixels per second are added per-frame
-    private const int MaxAcceleration = 20; // Maximum pixels per second that are added per-frame
-    private const int MoveStep = 20; // How many pixels per second that are times by acceleration, that are then added to the players position 
-    private const int Gravity = 1;
-
+   
+    public Controller(Controllable element)
+    {
+        _parent = element;
+        _velocity = new Vector2();
+    }
+    
     public Floor? FloorBelow;
     public bool OnGround = false;
     public bool FloorC = true;
-    public PlayerController(Player player)
-    {
-        _velocity = new Vector2();
-        _parent = player;
-    }
+    
+    
     private void OnKeyDownSpace()
     {
         if (OnGround)
         {
-            _velocity.Y = -MaxAcceleration * 1.5f;
+            _velocity.Y = (int)(-Consts.MaxAcceleration * 1.5);
         }
     }
     
     private void OnKeyDownA()
     {
-         _velocity.X -= AccelerationSpeed;
+         _velocity.X -= Consts.AccelerationSpeed;
 
-        if (_velocity.X < -MaxAcceleration) _velocity.X = -MaxAcceleration;
+        if (_velocity.X < -Consts.MaxAcceleration) _velocity.X = -Consts.MaxAcceleration;
     }
 
-    
+
     private void OnKeyDownD()
     {
-        _velocity.X += AccelerationSpeed;
+        _velocity.X += Consts.AccelerationSpeed;
 
-        if (_velocity.X > MaxAcceleration) _velocity.X = MaxAcceleration;
-    }
-
-    public void Move(int x, int y)
-    {
-        Vector2 position = _parent.Position;
-        position.X += Convert.ToSingle(x);
-        position.Y += Convert.ToSingle(y);
-        _parent.Position = position;
+        if (_velocity.X > Consts.MaxAcceleration) _velocity.X = Consts.MaxAcceleration;
     }
 
     public void Tick()
@@ -60,15 +50,19 @@ public class PlayerController
         
         HandleInput();
         
-        _velocity.Y += Gravity;
+        _velocity.Y += Consts.Gravity;
         
-        int rx = (int) Math.Round(MoveStep * (_velocity.X / MaxAcceleration));
-        int ry = (int) Math.Round(MoveStep * (_velocity.Y / MaxAcceleration));
+        // Find position + velocity
+        int rx = (int) Math.Round(Consts.MoveStep * (_velocity.X / Consts.MaxAcceleration));
+        int ry = (int) Math.Round(Consts.MoveStep * (_velocity.Y / Consts.MaxAcceleration));
         
+        // Basic offsets and positions
         float dimensionOffsetY = _parent.Dimensions.Y / 2;
         float dimensionOffsetX = _parent.Dimensions.X / 2;
         float footY = _parent.Position.Y + dimensionOffsetY;
-        
+
+        // Find the floor below or around the player (NEED TO UPDATE AND USE FUNCTION IN FLOOR CLASS)
+        // By finding if any platforms intersect with player bounds + velocity
         foreach (var pair in Loader.Game.Floors)
         {
             floor = pair.Value;
@@ -86,11 +80,12 @@ public class PlayerController
         {
             // Raylib.DrawText(Convert.ToString(FloorBelow._position.Y) + " " + Convert.ToString(footY), 0, 600, 24, Color.WHITE);
             
-            
+            // Check to see if is exactly ontop of platform
             if (Convert.ToInt32(FloorBelow._position.Y) == Convert.ToInt32(footY))
             {
                 OnGround = true;
 
+                // If Floor collision and is not jumping stop movement
                 if (!Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && FloorC)
                 {
                     _velocity.Y = 0;
@@ -98,40 +93,38 @@ public class PlayerController
                 }
             } 
             
+            // If player y position + velocity is below top of platform, set next movement step in y to ontop of platform
             else if (footY + ry >= FloorBelow._position.Y && footY <= FloorBelow._position.Y)
             {
                 ry = (int)Math.Round(FloorBelow._position.Y - footY);
             }
 
             bool inYBounds = _parent.Position.Y + dimensionOffsetY > FloorBelow._position.Y && _parent.Position.Y - dimensionOffsetY < FloorBelow._position.Y + FloorBelow._dimensions.Y;
-            // On edge of platform
-            if (Convert.ToInt32(FloorBelow._position.X) == Convert.ToInt32(_parent.Position.X + dimensionOffsetX) ||
+            // If in Y bounds and colliding with a side of a platform
+            if (inYBounds && Convert.ToInt32(FloorBelow._position.X) == Convert.ToInt32(_parent.Position.X + dimensionOffsetX) ||
                 Convert.ToInt32(FloorBelow._position.X + FloorBelow._dimensions.X) == Convert.ToInt32(_parent.Position.X - dimensionOffsetX))
             {
-                if (inYBounds)
-                {
-                    _velocity.X = 0;
-                    rx = 0;
-                }
-
+                _velocity.X = 0;
+                rx = 0;
             }
             
-            // Is player inside platform X bounds for the current X + rx, but not inside the platform for X
-            else if (((_parent.Position.X + dimensionOffsetX + rx >= FloorBelow._position.X &&
-                      _parent.Position.X + dimensionOffsetX <= FloorBelow._position.X) 
-                     ||
-                     (_parent.Position.X - dimensionOffsetX + rx <= FloorBelow._position.X + FloorBelow._dimensions.X &&
-                      _parent.Position.X - dimensionOffsetX >= FloorBelow._position.X + FloorBelow._dimensions.X))
-                     && inYBounds)
+            // If player x bounds + velocity is inside bounds, but not inside bounds for player x and in y bounds
+            else if (inYBounds && ((_parent.Position.X + dimensionOffsetX + rx >= FloorBelow._position.X &&
+                                _parent.Position.X + dimensionOffsetX <= FloorBelow._position.X) 
+                               ||
+                               (_parent.Position.X - dimensionOffsetX + rx <= FloorBelow._position.X + FloorBelow._dimensions.X &&
+                                _parent.Position.X - dimensionOffsetX >= FloorBelow._position.X + FloorBelow._dimensions.X)))
             {
                 if (_parent.Position.X < FloorBelow._position.X + (FloorBelow._dimensions.X / 2)) rx = (int)Math.Round(FloorBelow._position.X - (_parent.Position.X + dimensionOffsetX));
                 else rx = (int)Math.Round((FloorBelow._position.X + FloorBelow._dimensions.X) - (_parent.Position.X - dimensionOffsetX));
             }
 
         }
-        
-        Move(rx, ry);
 
+        // Move player with calculated phisics
+        _parent.Move(rx, ry);
+
+        // Position check, out of bounds
         if (!(_parent.Position.Y - _parent.Dimensions.Y + 100 > Game.Game.FloorHeight)) return;
         _parent.Position = new Vector2(50, Game.Game.FloorHeight - 175);
         _velocity = new Vector2();
@@ -140,15 +133,15 @@ public class PlayerController
     private void HandleInput()
     {
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) OnKeyDownSpace();
-        else { if (_velocity.Y < 0)  _velocity.Y += AccelerationSpeed / 2; }
+        else { if (_velocity.Y < 0)  _velocity.Y += Consts.AccelerationSpeed / 2; }
 
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_S)) FloorC = false;
         else FloorC = true; 
         
         if (Raylib.IsKeyDown(KeyboardKey.KEY_A)) { OnKeyDownA(); } 
-        else { if (_velocity.X < 0) _velocity.X += AccelerationSpeed / 2; }
+        else { if (_velocity.X < 0) _velocity.X += Consts.AccelerationSpeed / 2; }
 
         if (Raylib.IsKeyDown(KeyboardKey.KEY_D)) { OnKeyDownD(); } 
-        else { if (_velocity.X > 0) _velocity.X -= AccelerationSpeed / 2; }
+        else { if (_velocity.X > 0) _velocity.X -= Consts.AccelerationSpeed / 2; }
     }
 }

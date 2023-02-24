@@ -6,6 +6,9 @@ namespace Game.Game;
 
 public class RenderManager
 {
+    /* All of the screen elements being loaded and unloaded from the renderer */
+    
+    
     public void RenderPlayer(Player.Player player)
     {
         Loader.WindowManager.Renderer.RegisterElementRenderer(player.Renderer);

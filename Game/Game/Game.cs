@@ -1,42 +1,38 @@
-﻿
-
-using System.Numerics;
+﻿using System.Numerics;
 using Game.Game.GameObj;
 using Game.Level;
 using Game.Menu;
 using Game.Menu.Screens;
-using Game.Window;
 using Raylib_cs;
 
 namespace Game.Game;
 
 public class Game
 {
-    private Player.Player? _player;
+    public Player.Player? Player;
 
     public RenderManager RenderManager;
     public LevelManager LevelManager;
     public MenuManager MenuManager;
+    public CameraController CameraController;
 
-    public Dictionary<string, Floor> Floors = new Dictionary<string, Floor>();
+    public Dictionary<string, Floor> Floors = new ();
 
     public const int FloorHeight = 10000;
 
     public Level.Level? Level;
 
     public bool IsRunning;
-
-    public Game()
-    {
-    }
-
+    
     public void Init()
     {
         RenderManager = new RenderManager();
+        CameraController = new CameraController(this);
         LevelManager = new LevelManager();
         MenuManager = new MenuManager();
     }
 
+    // Load the selected level data and begin game
     public void LoadLevel()
     {
         Reset();
@@ -44,24 +40,27 @@ public class Game
         
         int sy = FloorHeight - (int)Level.GetSpawn().Y;
         
-        _player = new Player.Player(new Vector2(Level.GetSpawn().X, sy));
+        Player = new Player.Player(new Vector2(Level.GetSpawn().X, sy));
         
-        Loader.WindowManager.Camera.target = _player.Position with { Y = FloorHeight };
+        Loader.WindowManager.Camera.target = Level.GetSpawn() with {Y = FloorHeight };
         
         RenderElements();
     }
 
+    // Remove all level data
     private void Reset()
     {
         if (Floors.Count > 0) RenderManager.UnrenderFloors(Floors);
-        if (_player != null) RenderManager.UnrenderPlayer(_player);
+        if (Player != null) RenderManager.UnrenderPlayer(Player);
         
         Floors = new Dictionary<string, Floor>();
-        _player = null;
+        Player = null;
     }
 
+    // Register all level platforms
     private void RegisterFloors()
     {
+        // Iterate over all floors in the level data and register them as game objects
         foreach (var floorData in Level.GetFloors())
         {
             int y = FloorHeight - (int)floorData.Position.Y;
@@ -69,12 +68,14 @@ public class Game
         }
     }
 
+    // Load renderers 
     private void RenderElements()
     {
         RenderManager.RenderFloors(Floors);
-        RenderManager.RenderPlayer(_player); 
+        RenderManager.RenderPlayer(Player); 
     }
 
+    // Tick() function in all files executes the main logic for that frame
     public void Tick()
     {
         MenuManager.Tick();
@@ -88,7 +89,7 @@ public class Game
                 return;
             } 
             
-            if (_player != null)
+            if (Player != null)
             {
                 IsRunning = true;
                 MenuManager.DisableAll();
@@ -97,27 +98,10 @@ public class Game
         
         if (!IsRunning) return;
         
-        _player.Tick();
-        
-        int targetHeight = (int) Loader.WindowManager.Camera.target.Y;
-            
-        if (_player.Position.Y < targetHeight - (Raylib.GetScreenHeight() / 2 + (Raylib.GetScreenHeight() / 16)))
-        {
-            targetHeight -= 10;
-        }
+        Player.Tick();
+        CameraController.Tick();
 
-        if (_player.Position.Y > targetHeight - (Raylib.GetScreenHeight() / 16))
-        {
-            if (_player.Controller._velocity.Y >= 40) targetHeight = (int)_player.Position.Y;
-            else targetHeight += 10;
-        }
-
-        Loader.WindowManager.Camera.target = _player.Position with { Y = targetHeight };
-        Loader.WindowManager.Camera.offset = new Vector2(Raylib.GetScreenWidth() / 2 - (Raylib.GetScreenWidth() / 8), Raylib.GetScreenHeight() / 2 + (Raylib.GetScreenHeight() / 4));
-
-
-        if (Raylib.IsKeyDown(KeyboardKey.KEY_E) && Loader.WindowManager.Camera.zoom < 1.3f) Loader.WindowManager.Camera.zoom += 0.05f;
-        else if (Raylib.IsKeyDown(KeyboardKey.KEY_Q)&& Loader.WindowManager.Camera.zoom > 0.7f) Loader.WindowManager.Camera.zoom -= 0.05f;
+        // Camera controls
     }
 }
 

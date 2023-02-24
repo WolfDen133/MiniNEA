@@ -13,11 +13,13 @@ public class LevelManager
         LoadLevels();
     }
 
+    // Read all level data files
     private void LoadLevels()
     {
         string levelDbRaw = File.ReadAllText(Directory.GetCurrentDirectory() + "/Levels/levels.json");
         JObject levelDb = JObject.Parse(levelDbRaw);
 
+        // Iterate through every entry in the level database file
         foreach (var i in levelDb)
         {
             string name = i.Key;
@@ -27,6 +29,7 @@ public class LevelManager
         }
     }
 
+    // Validates and registers to database
     private void RegisterLevel(string name, string file)
     {
         string rawSchema = File.ReadAllText(Directory.GetCurrentDirectory() + "/Levels/levelSchema.json");

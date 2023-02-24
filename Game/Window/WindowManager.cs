@@ -7,6 +7,8 @@ namespace Game.Window;
 public class WindowManager
 {
     public Camera2D Camera;
+    
+    // Initialisation of the window
     public void CreateWindow()
     {
         Raylib.InitWindow(
@@ -25,6 +27,7 @@ public class WindowManager
         Camera.zoom = 1.0f;
     }
 
+    // Update loop
     public void DrawLoop()
     {
         while (!Raylib.WindowShouldClose()) 

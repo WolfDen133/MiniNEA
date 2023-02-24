@@ -1,23 +1,20 @@
-﻿using System.Numerics;
+﻿using Game.Input;
+using System.Numerics;
 
 namespace Game.Player;
 
-public class Player
+public class Player : Controllable
 {
-    public Vector2 Position;
-
-    public Vector2 Dimensions;
-
     public PlayerRenderer? Renderer;
 
-    public PlayerController Controller;
+    public Controller Controller;
 
     public Player(Vector2 spawn)
     {
           Position = spawn;
           Dimensions = new Vector2(60, 70);
           Renderer = new PlayerRenderer(this);
-          Controller = new PlayerController(this);
+          Controller = new Controller(this);
     }
 
     public void Tick()

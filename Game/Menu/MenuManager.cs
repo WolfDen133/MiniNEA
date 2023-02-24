@@ -23,13 +23,14 @@ public class MenuManager
         window.Tick();
     }
 
+    // Load all menus
     private void RegisterMenus()
     {
         LevelSelectScreen screen = new LevelSelectScreen();
         _windows.Add(LevelSelectScreen.UI_ID, screen);
         Loader.Game.RenderManager.RenderMenu(screen.Renderer);
     } 
-
+    
     public void SetActiveWindow(int id)
     {
         DisableAll();
@@ -42,6 +43,7 @@ public class MenuManager
 
     public void DisableAll()
     {
+        // Unregister renderer
         foreach (var pair in _windows)
         {
             Loader.WindowManager.Renderer.DisableRenderer(pair.Value.Renderer.Identifier);

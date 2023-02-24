@@ -62,17 +62,16 @@ public class Renderer
     {
         //TODO: Implement background renderers.
 
+        // Render all game elements
         foreach (KeyValuePair<string, ElementRenderer?> renderer in _elementRenderers)
         {
             if (renderer.Value.isEnabled) renderer.Value.Draw();
         }
         
+        // Render all ui elements
         foreach (KeyValuePair<string, UiRenderer> renderer in _uiRenderers)
         {
-            if (renderer.Value.isEnabled)
-            {
-                renderer.Value.Draw();
-            }
+            if (renderer.Value.isEnabled) renderer.Value.Draw();
         }
     }
 }

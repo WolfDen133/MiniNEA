@@ -4,27 +4,29 @@
 
 Unnamed is a game with no name, its name is referenced no were, however don't overlook its simple design and graphics as under the hood, unnamed is an advanced machine only using User Inputs and Draw Functions as a structure, using custom made data structures, classes, managers, objects and much more to accomplish a fast and efficient design, while maintaining the ability of easily updating existing code, and even adding future elements.
 
+## Analysis
+
 > ## Goals
 > 
 > - To create a 2D platform game
-> - To demonstrate advanced programming techniques to allow for future elements
+> - To demonstrate advanced programming techniques to allow for future development
 > - To use and expand knowledge to assist me in the development in this and future projects
 
-> ## Initial thoughts
+> ### Initial thoughts
 > I want to create a 2D platform game, with the player being a 'Nano-helper', working in a PC building work shop, gathering, moving, or repairing various parts, and gaining knowledge to complete the challenges.
 > I want the player to be controllable in the X and Y coordinates, and can move, grab, and pick up items, various controls and abilities being unlocked by hitting achievements and picking up items.
 > I want the user to be able to learn about building or repairing computers, while playing a game.
 
-> ## Analysis and Problem Identification
+> ### Analysis and Problem Identification
 > The reason I want to create a 2D Q&A platform game, is because it can serve educational use, as it teaches about PC hardware, while also still being interesting to those already competent in the area.
 > I want the game to be able to be played by many, of all different ages and to help aid in the spread of knowledge about PCs.
 > There are many people who love playing video games, but do not necessarily know the process of how that game is actually made, so this game should help people understand this subject better.
 
-> ## Why a game?
+> ### Why a game?
 > Well so many people play games all around the world every day on there computers, but how about while playing those games they could be learning about how the game starts as power, and ends in a controllable experience.
 > Games are a good way to convey information as they can have you interact with elements, sometimes solving problems to teach a player a certain skill in there game.
 
-> ## Other games like this
+> ### Other games like this
 > 
 > There have been some other games like what I want to create 
 > > #### PC Building Simulator
@@ -34,7 +36,7 @@ Unnamed is a game with no name, its name is referenced no were, however don't ov
 > 
 > > #### Mario
 > > This game is a 2D side scroller, just like mine will be, the player executes movement based of of directional velocity, therefor I will be using these elements in my game.
-> > However, Mario is a more traditional story-level stroke game, where you complete levels based on clearning obsticals, but I want to have the player collecting items and bringing them back to a place.
+> > However, Mario is a more traditional story-level stroke game, where you complete levels based on collecting items and clearing obstacles, but I want to have the player collecting items and bringing them back to a place.
 > > Mario also has enemies, and my game currently does not.
 > > ![](https://i.insider.com/560ebbe7dd0895325c8b458e?width=700)
 ## Development
@@ -44,6 +46,7 @@ Unnamed is a game with no name, its name is referenced no were, however don't ov
 > - The use of object bases and managers are for future-proofing as I intend to improve and update this project in future.
 > - The use of creating a renderer is so that game logic and graphics can be completely separate, leading to tidier code, and improved maintainability; it is also good practice to keep these things separate.
 > - The use of level files and a level database is so that it is easier to add levels to the game.
+> - Comments have now been added, but were not when screenshots were taken. Look at source files for commenting.
 
 > ### Window Initialization, RenderManager and Camera
 > 
@@ -127,7 +130,7 @@ Unnamed is a game with no name, its name is referenced no were, however don't ov
 > 
 > This part was one of the most hard parts of this project as it has a lot of calculations that have to pe perfect inorder for it to work.
 > I went through many stages of development, finding many different bugs with the calculations, it took me just over a day to perfect this code 
-> Inserting the code below impliments Collision Detection for the Floors and Player
+> Inserting the code below implements Collision Detection for the Floors and Player
 > ```csharp
 >        float dimensionOffsetY = _parent.Dimensions.Y / 2;
 >        float dimensionOffsetX = _parent.Dimensions.X / 2;
@@ -250,6 +253,33 @@ Unnamed is a game with no name, its name is referenced no were, however don't ov
 > 
 > I would like to make this section of the code more streamlined and organised as I found that it can be a bit messy dealing with lots of different elements and properties can be challenging.
 > Testing this, I created a template level file and then duplicated it for more levels, then added the levels to levels.json, and ran the program. The levels showed up and it was done.
-> This provides the user to make a selection of what level they want to play
+> This provides the user to make a selection of what level they want to play_
 
+## Evaluation 
+
+> Firstly I would like to say that I am satisfied with the code as a whole, as I wanted to focus more on the actual game logic, to build a framework for creating objects that we can interact with and draw to the screen.
+> However there is some things that I would like to improve on in this project.
+> As the program stands, it currently remains in the Alpha stage, as the project is not currently finished to the extent of my initial thoughts and goals.
+
+
+>### Alpha testing
+> My first stage of alpha testing took place once I had completed Floor platforms and player collision.
+> In the initial code I had, there were various bugs including:
+> - Player not having collision with the floor
+> - Player movement and velocity calculated after Move, therefor resulting in a frame where the player overshot the collision
+> - Having collision for the whole length of the map, not just where it should
+>
+> With various tweaks to the code, and one full re-write of the collision detection. I eventually reached the solution I have, I was so relieved to find out that it worked correctly.
+> Once I had completed the player collision I had the initial thought to move collision detection to a separate file, easier for implementing collision for other elements easier to implement, however, due to time constraints and the way the project was moving, it was clear that I needed to move on to something else.
+> I may revisit this idea at a later date
+> 
+> The next stage of Alpha testing took place after Level loading was completed. 
+> I simply loaded one level, and in the level manager defined level 1 as the default level to be loaded, before the LevelMenu was introduced.
+> To my surprise this worked, with the only few bugs being related to json file reading.
+> The reason for these errors was because, even though I knew how to read and write to files, I didn't know how to properly deserialize a json file in C#, so had some struggles with the learning curve.
+> Once I got the hang of it, it worked a treat!
+
+> ### Beta testing
+> 
+> As of now, I'm the only one who has beta tested my program, but everyone that I showed it to has had positive feedback to give.
 
