@@ -207,19 +207,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\minec\\.nuget\\packages\\": {}
+    "C:\\Users\\Reuben\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\minec\\RiderProjects\\MiniNEA\\Game\\Game.csproj",
+      "projectUniqueName": "C:\\Users\\Reuben\\RiderProjects\\MiniNEA\\Game\\Game.csproj",
       "projectName": "Game",
-      "projectPath": "C:\\Users\\minec\\RiderProjects\\MiniNEA\\Game\\Game.csproj",
-      "packagesPath": "C:\\Users\\minec\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\minec\\RiderProjects\\MiniNEA\\Game\\obj\\",
+      "projectPath": "C:\\Users\\Reuben\\RiderProjects\\MiniNEA\\Game\\Game.csproj",
+      "packagesPath": "C:\\Users\\Reuben\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Reuben\\RiderProjects\\MiniNEA\\Game\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\minec\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Reuben\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

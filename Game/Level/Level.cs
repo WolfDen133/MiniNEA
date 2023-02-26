@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Game.Level;
 
@@ -7,6 +8,7 @@ public class FloorData
 {
     public Vector2 Position { get; set; }
     public Vector2 Dimensions { get; set; }
+    public bool IsWin { get; set; }
 }
 
 public class Level
@@ -43,10 +45,15 @@ public class Level
             int y = floorData.position[1];
             int dx = floorData.dimensions[0];
             int dy = floorData.dimensions[1];
+            
+            JObject data = JObject.FromObject(floorData);
+            
+            data.TryGetValue("isWin", StringComparison.Ordinal, out JToken? isWin);
 
             FloorData floor = new FloorData();
             floor.Position = new Vector2(x, y);
             floor.Dimensions = new Vector2(dx, dy);
+            floor.IsWin = isWin?.Value<bool>() ?? false;
 
 
             floorList.Add(floor);

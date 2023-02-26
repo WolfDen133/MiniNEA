@@ -1,8 +1,9 @@
-﻿using System.Numerics;
+﻿using System.Diagnostics;
+using System.Numerics;
 using Game.Game.GameObj;
 using Game.Level;
-using Game.Menu;
-using Game.Menu.Screens;
+using Game.Ui;
+using Game.Ui.Screens;
 using Raylib_cs;
 
 namespace Game.Game;
@@ -20,9 +21,14 @@ public class Game
 
     public const int FloorHeight = 10000;
 
+    public Stopwatch Timer;
+
     public Level.Level? Level;
 
     public bool IsRunning;
+
+    public Font Font;
+    public Font TimerFont;
     
     public void Init()
     {
@@ -30,6 +36,9 @@ public class Game
         CameraController = new CameraController(this);
         LevelManager = new LevelManager();
         MenuManager = new MenuManager();
+        Font = Raylib.LoadFontEx(Directory.GetCurrentDirectory() + "/assets/font/main.otf", 256, null, 250);
+        TimerFont = Raylib.LoadFontEx(Directory.GetCurrentDirectory() + "/assets/font/timer.otf", 256, null, 250);
+        Timer = new Stopwatch();
     }
 
     // Load the selected level data and begin game
@@ -41,10 +50,11 @@ public class Game
         int sy = FloorHeight - (int)Level.GetSpawn().Y;
         
         Player = new Player.Player(new Vector2(Level.GetSpawn().X, sy));
-        
+
         Loader.WindowManager.Camera.target = Level.GetSpawn() with {Y = FloorHeight };
         
         RenderElements();
+        Timer.Start();
     }
 
     // Remove all level data
@@ -55,6 +65,8 @@ public class Game
         
         Floors = new Dictionary<string, Floor>();
         Player = null;
+        
+        Timer.Reset();
     }
 
     // Register all level platforms
@@ -64,7 +76,7 @@ public class Game
         foreach (var floorData in Level.GetFloors())
         {
             int y = FloorHeight - (int)floorData.Position.Y;
-            Floors.Add(Guid.NewGuid().ToString(), new Floor(floorData.Position with { Y = y }, floorData.Dimensions));
+            Floors.Add(Guid.NewGuid().ToString(), new Floor(floorData.Position with { Y = y }, floorData.Dimensions, floorData.IsWin));
         }
     }
 
@@ -73,6 +85,12 @@ public class Game
     {
         RenderManager.RenderFloors(Floors);
         RenderManager.RenderPlayer(Player); 
+    }
+
+    public void Win()
+    {
+        Timer.Stop();
+        Player.Controller.InputsEnabled = false;
     }
 
     // Tick() function in all files executes the main logic for that frame
@@ -85,6 +103,7 @@ public class Game
             if (IsRunning)
             {
                 IsRunning = false;
+                Timer.Stop();
                 MenuManager.SetActiveWindow(LevelSelectScreen.UI_ID);
                 return;
             } 
@@ -92,6 +111,7 @@ public class Game
             if (Player != null)
             {
                 IsRunning = true;
+                Timer.Start();
                 MenuManager.DisableAll();
             }
         }
@@ -100,8 +120,6 @@ public class Game
         
         Player.Tick();
         CameraController.Tick();
-
-        // Camera controls
     }
 }
 

@@ -19,6 +19,7 @@ public class Controller
     public Floor? FloorBelow;
     public bool OnGround = false;
     public bool FloorC = true;
+    public bool InputsEnabled = true;
     
     
     private void OnKeyDownSpace()
@@ -46,10 +47,8 @@ public class Controller
 
     public void Tick()
     {
-        Floor? floor;
-        
         HandleInput();
-        
+
         _velocity.Y += Consts.Gravity;
         
         // Find position + velocity
@@ -65,8 +64,8 @@ public class Controller
         // By finding if any platforms intersect with player bounds + velocity
         foreach (var pair in Loader.Game.Floors)
         {
-            floor = pair.Value;
-            if (footY + ry > floor._position.Y && _parent.Position.X + dimensionOffsetX + rx >= floor._position.X && _parent.Position.X - dimensionOffsetX + rx <= floor._position.X + floor._dimensions.X) {
+            Floor? floor = pair.Value;
+            if (footY + ry > floor.Position.Y && _parent.Position.X + dimensionOffsetX + rx >= floor.Position.X && _parent.Position.X - dimensionOffsetX + rx <= floor.Position.X + floor.Dimensions.X) {
                 FloorBelow = floor;
                 break; 
             }
@@ -81,12 +80,18 @@ public class Controller
             // Raylib.DrawText(Convert.ToString(FloorBelow._position.Y) + " " + Convert.ToString(footY), 0, 600, 24, Color.WHITE);
             
             // Check to see if is exactly ontop of platform
-            if (Convert.ToInt32(FloorBelow._position.Y) == Convert.ToInt32(footY))
+            if (Convert.ToInt32(FloorBelow.Position.Y) == Convert.ToInt32(footY))
             {
                 OnGround = true;
 
+                // TODO: move to player class
+                if (FloorBelow.IsWin)
+                {
+                    Loader.Game.Win();
+                }
+
                 // If Floor collision and is not jumping stop movement
-                if (!Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && FloorC)
+                if (!(Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && InputsEnabled) && FloorC)
                 {
                     _velocity.Y = 0;
                     ry = 0;
@@ -94,29 +99,29 @@ public class Controller
             } 
             
             // If player y position + velocity is below top of platform, set next movement step in y to ontop of platform
-            else if (footY + ry >= FloorBelow._position.Y && footY <= FloorBelow._position.Y)
+            else if (footY + ry >= FloorBelow.Position.Y && footY <= FloorBelow.Position.Y)
             {
-                ry = (int)Math.Round(FloorBelow._position.Y - footY);
+                ry = (int)Math.Round(FloorBelow.Position.Y - footY);
             }
 
-            bool inYBounds = _parent.Position.Y + dimensionOffsetY > FloorBelow._position.Y && _parent.Position.Y - dimensionOffsetY < FloorBelow._position.Y + FloorBelow._dimensions.Y;
+            bool inYBounds = _parent.Position.Y + dimensionOffsetY > FloorBelow.Position.Y && _parent.Position.Y - dimensionOffsetY < FloorBelow.Position.Y + FloorBelow.Dimensions.Y;
             // If in Y bounds and colliding with a side of a platform
-            if (inYBounds && Convert.ToInt32(FloorBelow._position.X) == Convert.ToInt32(_parent.Position.X + dimensionOffsetX) ||
-                Convert.ToInt32(FloorBelow._position.X + FloorBelow._dimensions.X) == Convert.ToInt32(_parent.Position.X - dimensionOffsetX))
+            if (inYBounds && Convert.ToInt32(FloorBelow.Position.X) == Convert.ToInt32(_parent.Position.X + dimensionOffsetX) ||
+                Convert.ToInt32(FloorBelow.Position.X + FloorBelow.Dimensions.X) == Convert.ToInt32(_parent.Position.X - dimensionOffsetX))
             {
                 _velocity.X = 0;
                 rx = 0;
             }
             
             // If player x bounds + velocity is inside bounds, but not inside bounds for player x and in y bounds
-            else if (inYBounds && ((_parent.Position.X + dimensionOffsetX + rx >= FloorBelow._position.X &&
-                                _parent.Position.X + dimensionOffsetX <= FloorBelow._position.X) 
+            else if (inYBounds && ((_parent.Position.X + dimensionOffsetX + rx >= FloorBelow.Position.X &&
+                                _parent.Position.X + dimensionOffsetX <= FloorBelow.Position.X) 
                                ||
-                               (_parent.Position.X - dimensionOffsetX + rx <= FloorBelow._position.X + FloorBelow._dimensions.X &&
-                                _parent.Position.X - dimensionOffsetX >= FloorBelow._position.X + FloorBelow._dimensions.X)))
+                               (_parent.Position.X - dimensionOffsetX + rx <= FloorBelow.Position.X + FloorBelow.Dimensions.X &&
+                                _parent.Position.X - dimensionOffsetX >= FloorBelow.Position.X + FloorBelow.Dimensions.X)))
             {
-                if (_parent.Position.X < FloorBelow._position.X + (FloorBelow._dimensions.X / 2)) rx = (int)Math.Round(FloorBelow._position.X - (_parent.Position.X + dimensionOffsetX));
-                else rx = (int)Math.Round((FloorBelow._position.X + FloorBelow._dimensions.X) - (_parent.Position.X - dimensionOffsetX));
+                if (_parent.Position.X < FloorBelow.Position.X + (FloorBelow.Dimensions.X / 2)) rx = (int)Math.Round(FloorBelow.Position.X - (_parent.Position.X + dimensionOffsetX));
+                else rx = (int)Math.Round((FloorBelow.Position.X + FloorBelow.Dimensions.X) - (_parent.Position.X - dimensionOffsetX));
             }
 
         }
@@ -132,16 +137,16 @@ public class Controller
 
     private void HandleInput()
     {
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE)) OnKeyDownSpace();
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_SPACE) && InputsEnabled) OnKeyDownSpace();
         else { if (_velocity.Y < 0)  _velocity.Y += Consts.AccelerationSpeed / 2; }
 
-        if (Raylib.IsKeyPressed(KeyboardKey.KEY_S)) FloorC = false;
+        if (Raylib.IsKeyPressed(KeyboardKey.KEY_S)&& InputsEnabled) FloorC = false;
         else FloorC = true; 
         
-        if (Raylib.IsKeyDown(KeyboardKey.KEY_A)) { OnKeyDownA(); } 
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_A)&& InputsEnabled) { OnKeyDownA(); } 
         else { if (_velocity.X < 0) _velocity.X += Consts.AccelerationSpeed / 2; }
 
-        if (Raylib.IsKeyDown(KeyboardKey.KEY_D)) { OnKeyDownD(); } 
+        if (Raylib.IsKeyDown(KeyboardKey.KEY_D)&& InputsEnabled) { OnKeyDownD(); } 
         else { if (_velocity.X > 0) _velocity.X -= Consts.AccelerationSpeed / 2; }
     }
 }

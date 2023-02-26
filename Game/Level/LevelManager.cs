@@ -42,4 +42,14 @@ public class LevelManager
 
         Levels.Add(name, new Level(name, levelRaw));
     }
+    
+    public void SelectLevel(string id)
+    {
+        Loader.Game.LevelManager.Levels.TryGetValue(id, out Level? level);
+
+        Loader.Game.Level = level;
+        
+        Loader.Game.LoadLevel();
+        Loader.Game.IsRunning = true;
+    }
 }

@@ -31,7 +31,10 @@
               "minItems": 2,
               "maxItems": 2
             }
-          }
+          },
+          "isWin": {
+            "type": "boolean"
+          } 
         }
       }
     },

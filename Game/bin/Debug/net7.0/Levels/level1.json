@@ -19,11 +19,8 @@
     },
     {
       "position": [2300, 600],
-      "dimensions": [200, 20]
-    },
-    {
-      "position": [800, 200],
-      "dimensions": [200, 20]
+      "dimensions": [200, 20],
+      "isWin": true
     }
   ]
 }

@@ -1,4 +1,6 @@
-﻿namespace Game.Input;
+﻿using Raylib_cs;
+
+namespace Game.Input;
 
 using System.Numerics;
 

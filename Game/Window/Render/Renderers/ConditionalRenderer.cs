@@ -1,6 +1,4 @@
-﻿using Game.Menu.Misc;
-
-namespace Game.Window.Render.Renderers;
+﻿namespace Game.Window.Render.Renderers;
 
 // Renderer that only draws when the logic calls it
 public class ConditionalRenderer : UiRenderer

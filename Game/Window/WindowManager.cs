@@ -7,15 +7,15 @@ namespace Game.Window;
 public class WindowManager
 {
     public Camera2D Camera;
-    
-    // Initialisation of the window
     public void CreateWindow()
     {
         Raylib.InitWindow(
-        1280,
-        720,
-        GameConst.Name
+            1280,
+            720,
+            GameConst.Name
         );
+        
+        Raylib.SetExitKey(KeyboardKey.KEY_NULL);
 
         Raylib.SetTargetFPS(60);
         Renderer = new Renderer();
@@ -27,21 +27,23 @@ public class WindowManager
         Camera.zoom = 1.0f;
     }
 
-    // Update loop
     public void DrawLoop()
     {
         while (!Raylib.WindowShouldClose()) 
         {
-
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLACK);
-            Raylib.BeginMode2D(Camera);
-            
-            
+                
             Loader.Game.Tick();
-            Renderer.Draw();
-            
-            
+                
+            Raylib.BeginMode2D(Camera);
+                
+            Renderer.DrawGame();
+                
+            Raylib.EndMode2D();
+
+            Renderer.DrawUi();
+
             Raylib.EndDrawing();
         }
         

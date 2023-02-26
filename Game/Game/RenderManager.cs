@@ -1,13 +1,22 @@
 ﻿using Game.Game.GameObj;
 using Game.Player;
+using Game.Ui.Overlay.Render;
 using Game.Window.Render.Renderers;
 
 namespace Game.Game;
 
 public class RenderManager
 {
-    /* All of the screen elements being loaded and unloaded from the renderer */
-    
+    public RenderManager()
+    {
+        RegisterDefault();
+    }
+
+    private void RegisterDefault()
+    {
+        if (GameConst.Debug) Loader.WindowManager.Renderer.RegisterUiRenderer(new DebugRenderer());
+        Loader.WindowManager.Renderer.RegisterUiRenderer(new TimerRenderer());
+    }
     
     public void RenderPlayer(Player.Player player)
     {
@@ -18,7 +27,7 @@ public class RenderManager
     {
         foreach (var pair in floors)
         {
-            Loader.WindowManager.Renderer.RegisterElementRenderer(pair.Value._Renderer);
+            Loader.WindowManager.Renderer.RegisterElementRenderer(pair.Value.Renderer);
         }
     }
 
@@ -26,7 +35,7 @@ public class RenderManager
     {
         foreach (var pair in floors)
         {
-            Loader.WindowManager.Renderer.UnregisterRenderer(pair.Value._Renderer.Identifier);
+            Loader.WindowManager.Renderer.UnregisterRenderer(pair.Value.Renderer.Identifier);
         }
     }
     

@@ -5,16 +5,17 @@ namespace Game.Game.GameObj;
 
 public class Floor
 {
-    public Vector2 _position;
-    public Vector2 _dimensions;
+    public Vector2 Position;
+    public Vector2 Dimensions;
+    public bool IsWin;
+    public readonly FloorRenderer? Renderer;
 
-    public FloorRenderer? _Renderer;
-
-    public Floor (Vector2 position, Vector2 dimensions)
+    public Floor (Vector2 position, Vector2 dimensions, bool isWin)
     {
-        _position = position;
-        _dimensions = dimensions;
+        Position = position;
+        Dimensions = dimensions;
+        IsWin = isWin;
 
-        _Renderer = new FloorRenderer(Guid.NewGuid(), this);
+        Renderer = new FloorRenderer(Guid.NewGuid(), this);
     }
 }
