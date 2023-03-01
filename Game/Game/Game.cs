@@ -3,7 +3,7 @@ using System.Numerics;
 using Game.Game.GameObj;
 using Game.Level;
 using Game.Ui;
-using Game.Ui.Screens;
+using Game.Ui.Misc;
 using Raylib_cs;
 
 namespace Game.Game;
@@ -26,9 +26,10 @@ public class Game
     public Level.Level? Level;
 
     public bool IsRunning;
-
-    public Font Font;
+    
     public Font TimerFont;
+
+    public bool Closed = false;
     
     public void Init()
     {
@@ -36,7 +37,9 @@ public class Game
         CameraController = new CameraController(this);
         LevelManager = new LevelManager();
         MenuManager = new MenuManager();
-        Font = Raylib.LoadFontEx(Directory.GetCurrentDirectory() + "/assets/font/main.otf", 256, null, 250);
+
+        new FontUtils();
+        
         TimerFont = Raylib.LoadFontEx(Directory.GetCurrentDirectory() + "/assets/font/timer.otf", 256, null, 250);
         Timer = new Stopwatch();
     }
@@ -96,6 +99,8 @@ public class Game
     // Tick() function in all files executes the main logic for that frame
     public void Tick()
     {
+        if (Closed) return;
+        
         MenuManager.Tick();
         
         if (Raylib.IsKeyPressed(KeyboardKey.KEY_P))
@@ -104,7 +109,7 @@ public class Game
             {
                 IsRunning = false;
                 Timer.Stop();
-                MenuManager.SetActiveWindow(LevelSelectScreen.UI_ID);
+                MenuManager.SetActiveWindow(1);
                 return;
             } 
             
@@ -120,6 +125,11 @@ public class Game
         
         Player.Tick();
         CameraController.Tick();
+    }
+
+    public void Close()
+    {
+        Closed = true;
     }
 }
 

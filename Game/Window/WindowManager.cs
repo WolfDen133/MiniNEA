@@ -31,11 +31,13 @@ public class WindowManager
     {
         while (!Raylib.WindowShouldClose()) 
         {
+            Loader.Game.Tick();
+
+            if (Loader.Game.Closed) break;
+            
             Raylib.BeginDrawing();
             Raylib.ClearBackground(Color.BLACK);
-                
-            Loader.Game.Tick();
-                
+            
             Raylib.BeginMode2D(Camera);
                 
             Renderer.DrawGame();
